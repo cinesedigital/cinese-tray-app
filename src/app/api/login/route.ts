@@ -1,9 +1,7 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma'
 import bcrypt from 'bcrypt';
 import { signJwtAccessToken } from '@/lib/jwt';
-
-
+import { cineseClientService } from '@/lib/ClientService';
 
 type RequestBody = {
     email: string;
@@ -14,11 +12,7 @@ export async function POST(request:Request){
     
     const body: RequestBody = await request.json();
 
-    const user = await prisma.user.findUnique({
-        where: {
-            email: body.email
-        }
-    });
+    const user = await cineseClientService.getUserByEmail(body.email);
 
     if(!user){
         return new NextResponse(null, {status: 401});

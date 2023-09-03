@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 
 export type ClientData = {
+    id: string
     name: string,
     email: string,
     password: string,
@@ -10,9 +11,9 @@ export type ClientData = {
 export default class ClientRepository {
 
     createUser = async (client: ClientData) => {
-        const {name, email, password} = client;
+        const {id, name, email, password} = client;
 
-        if(!name || !email || !password){
+        if(!id || !name || !email || !password){
             throw new Error("Missing fields");
         }
     
@@ -20,6 +21,7 @@ export default class ClientRepository {
     
         const user = await prisma.user.create({
             data: {
+                id,
                 name,
                 email,
                 hashedPassword
@@ -29,8 +31,25 @@ export default class ClientRepository {
         return userWithoutPassword;
     }
 
-    exists = async (client: ClientData) => {
-        const {email} = client;
+    getUserByEmail = async (email: string) => {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: email
+            }
+        });
+        return user;
+    }
+
+    getUserById = async (id: string) => {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: id
+            }
+        });
+        return user;
+    }
+
+    exists = async (email: string) => {
 
         const exist = await prisma.user.findUnique({
             where: {
@@ -40,4 +59,20 @@ export default class ClientRepository {
 
         return exist ? true : false;
     }
+
+    deleteUserById = async (id: string) => {
+        const user = await prisma.user.delete({
+            where: {
+                id: id
+            }
+        });
+
+        return user;
+    }
+
+    getAllUsers = async () => {
+        const users = await prisma.user.findMany();
+        return users;
+    }
+    
 }

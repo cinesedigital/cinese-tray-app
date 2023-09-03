@@ -1,3 +1,4 @@
+import exp from "constants";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 interface SignOption {
@@ -19,6 +20,17 @@ export function verifyJwt(token: string) {
     const secret_key = process.env.NEXTAUTH_SECRET;
     const decoded = jwt.verify(token, secret_key!);
     return decoded as JwtPayload;
+  } catch (error) {
+    return null;
+  }
+}
+ export function isAdminRole(token: string) {
+  try {
+    const decoded = jwt.decode(token) as {role: string};
+    if(decoded.role !== "admin") {
+      return false;
+    }
+    return true
   } catch (error) {
     return null;
   }

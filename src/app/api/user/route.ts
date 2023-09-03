@@ -1,6 +1,6 @@
-import { NextResponse, NextRequest } from 'next/server';
-import { verifyJwt } from '@/lib/jwt';
+import { NextResponse, NextRequest  } from 'next/server';
 import { cineseClientService } from '@/lib/ClientService';
+import { verifyJwt, isAdminRole } from '@/lib/jwt';
 
 export interface RegisterBody {
     name: string,
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     const accessToken = request.headers.get('Authorization');
 
-    if (!accessToken || !verifyJwt(accessToken)) {
+    if (!accessToken || !verifyJwt(accessToken) || !isAdminRole(accessToken)) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
     }
 
@@ -46,6 +46,15 @@ export async function POST(request: NextRequest) {
             return new NextResponse(JSON.stringify({ error: "Internal server error" }), { status: 500 });
         }
     }
+}
 
+export async function GET(request: NextRequest) {
+    const accessToken = request.headers.get('Authorization');
+    if (!accessToken || !verifyJwt(accessToken) || !isAdminRole(accessToken)) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
+    }
 
+    const users = await cineseClientService.getAllUsers();
+
+    return new NextResponse(JSON.stringify(users), { status: 200 });
 }
