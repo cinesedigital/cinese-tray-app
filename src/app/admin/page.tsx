@@ -3,13 +3,13 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
-export default function DashboardPage() {
+export default function AdminPage() {
 
     const {data:session, status} = useSession();
     useEffect(() => {
         if (status === 'unauthenticated') redirect('/login')
         if (status === 'loading') return;
-        if (!session?.user || session?.user.role != "user") redirect('/login');
+        if (!session?.user || session?.user.role != "admin") redirect('/login');
         
     }, [status]);
 
@@ -17,7 +17,7 @@ export default function DashboardPage() {
     
     return (
         <>
-            <h1>Dashboard</h1>
+            <h1>Admin</h1>
             <p>Olá {session?.user?.name}</p>
         </>
     )
