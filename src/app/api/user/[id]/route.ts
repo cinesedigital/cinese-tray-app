@@ -20,7 +20,7 @@ export async function GET(request:Request, {params}: {params: {id: string}}){
 export async function DELETE(request:Request, {params}: {params: {id: string}}){
     const accessToken = request.headers.get('Authorization');
 
-    if(!accessToken || !verifyJwt(accessToken)){
+    if(!accessToken || !verifyJwt(accessToken) || !isAdminRole(accessToken)){
         return new Response(JSON.stringify({error: "Unauthorized"}), {status: 401});
     }
 
