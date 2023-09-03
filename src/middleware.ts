@@ -5,8 +5,6 @@ export default withAuth(
 
     function middleware(request: NextRequestWithAuth) {
 
-        console.log(request.nextauth.token)
-
         if (request.nextUrl.pathname.startsWith("/dashboard")
             && request.nextauth.token?.role !== "admin") {
             return NextResponse.redirect(new URL("/login?error=user not allowed", request.url))
