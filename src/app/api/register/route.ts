@@ -1,12 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { verifyJwt } from '@/lib/jwt';
-import ClientRepository from '@/repository/ClientRepository';
-import PaymentGatewayClientService from '@/services/PaymentGatewayClientService';
-import CineseClientService from '@/services/CineseClientService';
-
-const clientRepository = new ClientRepository();
-const paymentGatewayClientService = new PaymentGatewayClientService();
-const cineseClientService = new CineseClientService(clientRepository, paymentGatewayClientService);
+import { cineseClientService } from '@/lib/ClientService';
 
 export interface RegisterBody {
     name: string,
