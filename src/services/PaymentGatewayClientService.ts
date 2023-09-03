@@ -14,7 +14,7 @@ export default class PaymentGatewayClientService {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                access_token: '$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjQ3MDY6OiRhYWNoXzUwOGFjNjVkLTUxYTAtNGEwNC1iZGIxLWNhOTQ2NjU1Y2VhMA=='
+                access_token: process.env.PAYMENT_GATEWAY_ACCESS_TOKEN as string
               },
             body: JSON.stringify(clientData)
         });
