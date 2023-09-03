@@ -2,11 +2,13 @@ import { NextResponse, NextRequest } from 'next/server';
 import { verifyJwt } from '@/lib/jwt';
 import ClientRepository from '@/repository/ClientRepository';
 import PaymentGatewayClientService from '@/services/PaymentGatewayClientService';
+import CineseClientService from '@/services/CineseClientService';
 
 const clientRepository = new ClientRepository();
 const paymentGatewayClientService = new PaymentGatewayClientService();
+const cineseClientService = new CineseClientService(clientRepository, paymentGatewayClientService);
 
-interface RegisterBody {
+export interface RegisterBody {
     name: string,
     email: string,
     password: string,
@@ -31,10 +33,8 @@ export async function POST(request: NextRequest) {
             return new NextResponse("Missing fields", { status: 400 });
         }
 
-        await paymentGatewayClientService.createUser({ name, email, cpfCnpj, phone });
-        
-        const user = await clientRepository.createUser({ name, email, password });
-        
+        const user = await cineseClientService.createUser({ name, email, password, cpfCnpj, phone });
+
         return new NextResponse(JSON.stringify(user), { status: 201 });
 
     }
@@ -49,7 +49,6 @@ export async function POST(request: NextRequest) {
             return new NextResponse(JSON.stringify({ error: "Error creating payment gateway user" }), { status: 500 });
         }
         else {
-            console.log(error);
             return new NextResponse(JSON.stringify({ error: "Internal server error" }), { status: 500 });
         }
     }

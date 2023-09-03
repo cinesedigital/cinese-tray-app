@@ -1,4 +1,4 @@
-type PaymentGatewayClient = {
+export type PaymentGatewayClient = {
     name: string,
     email: string,
     cpfCnpj: string,
@@ -14,11 +14,11 @@ export default class PaymentGatewayClientService {
             headers: {
                 accept: 'application/json',
                 'content-type': 'application/json',
-                access_token: process.env.PAYMENT_GATEWAY_ACCESS_TOKEN as string
+                access_token: `$${process.env.PAYMENT_GATEWAY_ACCESS_TOKEN as string}`
               },
             body: JSON.stringify(clientData)
         });
-        
+
         if(response.status !== 200) {
             throw new Error('Error creating payment gateway user');
         }
