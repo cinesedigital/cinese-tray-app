@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
-export default function DashboardPage() {
+function SessionButton(){
 
     const {data:session, status} = useSession();
     useEffect(() => {
@@ -15,10 +15,12 @@ export default function DashboardPage() {
     }, [status]);
 
     if (status === 'loading') return <p>Carregando...</p>
-    
+
     return (
-        <section className="min-h-screen">
-            <h1>Dashboard</h1>
-        </section>
+        <div>
+        <p>Olá {session?.user?.name}</p>
+        </div>
     )
 }
+
+export default SessionButton;
