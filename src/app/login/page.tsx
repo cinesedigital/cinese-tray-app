@@ -14,6 +14,7 @@ export default function LoginPage() {
     });
 
     const loginUser = async (e:FormEvent) => {
+      
         e.preventDefault();
 
         await signIn('credentials', {
