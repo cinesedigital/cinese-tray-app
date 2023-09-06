@@ -2,7 +2,6 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
-import { useSession } from "next-auth/react";
 import Logo from "@/components/shared/Logo";
 
 export default function LoginPage() {
@@ -24,6 +23,7 @@ export default function LoginPage() {
         });
         console.log(sign);
         if(!sign?.error){
+          console.log("sign redirect");
           router.push('/dashboard');
         }
     }
