@@ -6,6 +6,17 @@ const prisma = new PrismaClient();
 
 async function seed() {
 
+    //check if admin user already exists
+    const user = await prisma.user.findUnique({
+        where: {
+            email: process.env.ADMIN_EMAIL,
+        },
+    });
+
+    if (user) {
+        return;
+    }
+
     //create admin user
     const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD as string, 10);
 
