@@ -10,7 +10,7 @@ export default function DashboardPage() {
     useEffect(() => {
         if (status === 'unauthenticated') redirect('/login')
         if (status === 'loading') return;
-        if (!session?.user || session?.user.role != "user") redirect('/login');
+        if (!session?.user) redirect('/login');
         
     }, [status]);
 
