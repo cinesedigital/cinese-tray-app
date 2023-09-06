@@ -17,7 +17,7 @@ export default function DashboardPage() {
     if (status === 'loading') return <p>Carregando...</p>
     
     return (
-        <section className="min-h-screen">
+        <section className="min-h-screen w-full px-5">
             <h1>Dashboard</h1>
         </section>
     )
