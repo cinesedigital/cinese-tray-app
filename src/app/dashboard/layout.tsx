@@ -18,7 +18,7 @@ export default function DashboardLayout({
   return (
         <Provider>
           <Header />
-          {children}
+            {children}
           <Footer />
         </Provider>
   )
