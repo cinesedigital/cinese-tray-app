@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "npm run prisma:migrate && next build",
+    "vercel-build": "npm run prisma:migrate && npx prisma db seed && next build",
     "prisma:migrate": "npx prisma generate && DATABASE_URL=\"$MIGRATE_DATABASE_URL\" npx prisma migrate deploy"
   },
   "dependencies": {
