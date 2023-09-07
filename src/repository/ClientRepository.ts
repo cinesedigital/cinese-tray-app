@@ -6,14 +6,15 @@ export type ClientData = {
     name: string,
     email: string,
     password: string,
+    store: string
 }
 
 export default class ClientRepository {
 
     createUser = async (client: ClientData) => {
-        const {id, name, email, password} = client;
+        const {id, name, email, password, store} = client;
 
-        if(!id || !name || !email || !password){
+        if(!id || !name || !email || !password || !store){
             throw new Error("Missing fields");
         }
     
@@ -24,6 +25,7 @@ export default class ClientRepository {
                 id,
                 name,
                 email,
+                store,
                 hashedPassword
             }
         });

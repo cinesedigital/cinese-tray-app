@@ -4,7 +4,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
-    const planId = searchParams.get('planId');
+    //get request referer
+    const referer = request.headers.get('referer');
+
+    console.log(referer);
 
     const filePath = path.join(process.cwd(), 'src', 'scripts', 'voicesearch.js');
     const fileContents = fs.readFileSync(filePath, 'utf8');

@@ -9,9 +9,9 @@ export default class CineseClientService {
 
     async createUser(clientData:RegisterBody): Promise<PaymentGatewayClientResponse> { 
 
-        const {name, email, password, cpfCnpj, phone} = clientData;
+        const {name, email, password, cpfCnpj, phone, store} = clientData;
 
-        if(!name || !email || !password || !cpfCnpj || !phone){
+        if(!name || !email || !password || !cpfCnpj || !phone || !store){
             throw new Error("Missing fields");
         }
 
@@ -23,7 +23,7 @@ export default class CineseClientService {
 
         const client = await this.paymentGatewayClientService.createUser({name, email, cpfCnpj, phone});
 
-        await this.clientRepository.createUser({id: client.id, name, email, password});
+        await this.clientRepository.createUser({id: client.id, name, email, password, store});
 
         return {id: client.id, name, email, cpfCnpj, phone};
     }

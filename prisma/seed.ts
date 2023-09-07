@@ -22,9 +22,12 @@ async function seed() {
 
     await prisma.user.create({
         data: {
-            name: 'Cinese Digital',
+            name: 'gabriel.cinese',
             email: process.env.ADMIN_EMAIL,
             hashedPassword: hashedPassword,
+            api_address: "https://1225878.commercesuite.com.br/web_api",
+            code: "7d5fa6c62d53da7176135b66e69d149b9d65cf75a75d001e458b88f255cf7a03",
+            store: "1225878",
             role: 'admin',
         },
     });
