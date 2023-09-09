@@ -1,4 +1,3 @@
-import exp from "constants";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 interface SignOption {

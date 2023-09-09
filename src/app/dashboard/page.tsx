@@ -1,24 +1,45 @@
 'use client'
+import { Grid, Box } from '@mui/material';
+import PageContainer from './components/container/PageContainer';
+// components
+import SalesOverview from './components/dashboard/SalesOverview';
+import YearlyBreakup from './components/dashboard/YearlyBreakup';
+import RecentTransactions from './components/dashboard/RecentTransactions';
+import ProductPerformance from './components/dashboard/ProductPerformance';
+import AppsList from './components/dashboard/AppsList';
+import MonthlyEarnings from './components/dashboard/MonthlyEarnings';
 
-import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { useEffect } from "react";
-
-export default function DashboardPage() {
-
-    const {data:session, status} = useSession();
-    useEffect(() => {
-        if (status === 'unauthenticated') redirect('/login')
-        if (status === 'loading') return;
-        if (!session?.user) redirect('/login');
-        
-    }, [status]);
-
-    if (status === 'loading') return <p>Carregando...</p>
-    
-    return (
-        <section className="min-h-screen w-full px-5">
-            <h1>Dashboard</h1>
-        </section>
-    )
+const Dashboard = () => {
+  return (
+    <PageContainer title="Dashboard" description="this is Dashboard">
+      <Box>
+        <Grid container spacing={3}>
+          <Grid item xs={12} lg={8}>
+            <SalesOverview />
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <YearlyBreakup />
+              </Grid>
+              <Grid item xs={12}>
+                <MonthlyEarnings />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} lg={4}>
+            <RecentTransactions />
+          </Grid>
+          <Grid item xs={12} lg={8}>
+            <ProductPerformance />
+          </Grid>
+          <Grid item xs={12}>
+            <AppsList /> 
+          </Grid>
+        </Grid>
+      </Box>
+    </PageContainer>
+  )
 }
+
+export default Dashboard;

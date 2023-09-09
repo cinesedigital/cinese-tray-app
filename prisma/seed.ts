@@ -1,6 +1,8 @@
 
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import path from 'path';
+import fs from 'fs';
 
 const prisma = new PrismaClient();
 
@@ -19,7 +21,7 @@ async function seed() {
 
     //create admin user
     const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD as string, 10);
-
+    
     await prisma.user.create({
         data: {
             name: 'gabriel.cinese',
@@ -31,6 +33,19 @@ async function seed() {
             role: 'admin',
         },
     });
+
+    //create a app
+    const filePath = path.join(process.cwd(), 'src', 'scripts', 'voicesearch.js');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+
+    await prisma.app.create({
+        data: {
+            mainCode: fileContents,
+            name: "Pesquisa por voz",
+            image: "voicesearch.jpg",
+            price: 19.90,
+        }
+    })
 
 }
 

@@ -4,9 +4,14 @@ import { NextResponse } from "next/server"
 export default withAuth(
 
     function middleware(request: NextRequestWithAuth) {
-        if (request.nextUrl.pathname.startsWith("/admin")
-            && request.nextauth.token?.role !== "admin") {
-            return NextResponse.redirect(new URL("/dashboard", request.url))
+
+        if (request.nextUrl.pathname.startsWith("/dashboard")) {
+            if (!request.nextauth?.token || request.nextauth?.token?.exp as number < Date.now() / 1000){
+                console.log("You are not authorized!")
+                return NextResponse.rewrite(
+                    new URL("/login?message=You Are Not Authorized!", request.url)
+                );
+            }
         }
 
     },
@@ -17,6 +22,4 @@ export default withAuth(
     }
 )
 
-// Applies next-auth only to matching routes - can be regex
-// Ref: https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-export const config = { matcher: ["/dashboard", "/admin"] }
+export const config = { matcher: ["/dashboard/:path*"] }

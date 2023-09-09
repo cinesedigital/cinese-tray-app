@@ -10,6 +10,9 @@ datasource db {
 model App {
   id           String   @id @default(cuid())
   name         String
+  mainCode     String
+  image        String
+  price        Float
   users        UsersOnApps[]
 }
 
@@ -19,7 +22,7 @@ model User {
   email           String?   @unique
   hashedPassword  String
   role            String    @default("user")
-  store           String?
+  store           String?   @unique
   code            String?    
   api_address     String?
   apps            UsersOnApps[]

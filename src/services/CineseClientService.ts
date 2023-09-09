@@ -2,6 +2,12 @@ import ClientRepository from "@/repository/ClientRepository";
 import PaymentGatewayClientService, { PaymentGatewayClientResponse } from "./PaymentGatewayClientService";
 import { RegisterBody } from "@/app/api/user/route";
 
+export interface UserCodeUpdateData {
+    code: string,
+    store: string,
+    api_address: string
+}
+
 
 export default class CineseClientService {
 
@@ -63,5 +69,14 @@ export default class CineseClientService {
         await this.paymentGatewayClientService.deleteUserById(id);
         await this.clientRepository.deleteUserById(id);
         return client;
+    }
+
+    async setUserCode({ code, store, api_address }: UserCodeUpdateData) {
+
+        if (!code || !store || !api_address) {
+            throw new Error("Missing fields");
+        }
+        const user = await this.clientRepository.setUserCode({ code, store, api_address });
+        return user;
     }
 }

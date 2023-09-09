@@ -13,7 +13,7 @@ export async function POST(request:Request){
     const body: RequestBody = await request.json();
 
     const user = await cineseClientService.getUserByEmail(body.email);
-
+    console.log(user);
     if(!user){
         return new NextResponse(null, {status: 401});
     }

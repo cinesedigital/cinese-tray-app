@@ -1,4 +1,5 @@
 import prisma from '@/lib/prisma';
+import { UserCodeUpdateData } from '@/services/CineseClientService';
 import bcrypt from 'bcrypt';
 
 export type ClientData = {
@@ -46,7 +47,8 @@ export default class ClientRepository {
         const user = await prisma.user.findUnique({
             where: {
                 id: id
-            }
+            },include: {apps: true}
+            
         });
         return user;
     }
@@ -75,6 +77,30 @@ export default class ClientRepository {
     getAllUsers = async () => {
         const users = await prisma.user.findMany();
         return users;
+    }
+
+    setUserCode = async (data: UserCodeUpdateData) => {
+        const { code, store, api_address } = data;
+        if (!code || !store || !api_address) {
+            throw new Error("Missing fields");
+        }       
+
+        const user = await prisma.user.update({
+            where: {
+                store: store
+            },
+            data: {
+                code: code,
+                api_address: api_address
+            }
+        });
+
+        if (!user) {
+            return null;
+        }
+        
+        const {hashedPassword: _, ...userWithoutPassword} = user;
+        return userWithoutPassword;
     }
     
 }

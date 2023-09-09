@@ -1,7 +1,8 @@
 import { NextResponse, NextRequest  } from 'next/server';
 import { cineseClientService } from '@/lib/ClientService';
-import { verifyJwt, isAdminRole } from '@/lib/jwt';
-
+import { getServerSession } from "next-auth/next"
+import { options
+ } from '../auth/[...nextauth]/options';
 export interface RegisterBody {
     name: string,
     email: string,
@@ -45,12 +46,30 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-    const accessToken = request.headers.get('Authorization');
-    if (!accessToken || !verifyJwt(accessToken) || !isAdminRole(accessToken)) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-    }
-
+    
+    
     const users = await cineseClientService.getAllUsers();
 
     return new NextResponse(JSON.stringify(users), { status: 200 });
+}
+
+export async function PUT(request: NextRequest){
+
+    try{
+    const body = await request.json();
+    const {code, store, api_address} = body.data ?? body;
+    
+    if(!code || !store || !api_address){
+        return new Response(JSON.stringify({ error: "Missing fields" }), { status: 400 });
+    }
+    const user = await cineseClientService.setUserCode({code, store, api_address});
+    console.log(user);
+    if(!user){
+        return new Response(JSON.stringify({ error: "User not found" }), { status: 404 });
+    }
+    return new NextResponse(JSON.stringify(user), { status: 201 });
+    }
+    catch(error: any){
+        return new Response(JSON.stringify({ error: "Internal server error" }), { status: 500 });
+    }
 }
